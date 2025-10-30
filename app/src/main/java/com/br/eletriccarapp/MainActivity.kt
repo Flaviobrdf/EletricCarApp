@@ -1,20 +1,50 @@
 package com.br.eletriccarapp
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.widget.Button
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import android.util.Log;
+import android.widget.TextView
+
 
 class MainActivity : AppCompatActivity() {
+    lateinit var preco: EditText
+    lateinit var btnCalcular : Button
+    lateinit var kmPercorrido: EditText
+    lateinit var resultado: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        setupView()
+        setupListeners()
+    }
+
+    fun setupView(){
+        preco = findViewById(R.id.et_preco_km)
+        kmPercorrido = findViewById(R.id.et_km_percorrido)
+        btnCalcular = findViewById(R.id.btn_calcular)
+        resultado = findViewById(R.id.tv_resultado)
+    }
+
+    fun setupListeners(){
+        btnCalcular.setOnClickListener{
+            //val textoDitado = preco.text.toString()
+            //Log.d("Texto digitado", textoDitado)
+            calcular()
+
+
         }
+    }
+
+    fun calcular () {
+        val preco = preco.text.toString().toFloat()
+        val km = kmPercorrido.text.toString().toFloat()
+
+        val result = preco * km
+
+        resultado.text = "R$: " + result.toString()
+        Log.d("Resultado -> ", result.toString())
     }
 }
