@@ -10,4 +10,6 @@
     <string name="preco_kwh">Preço Kwh</string>
     <string name="Km_percorrido">Km Percorrido</string>
     <string name="calcular">Calcular Valor Para Abastecer</string>
+    <string name="calcular_autonomia">Calcular Autonomia</string>
+    <string name="no_wifi">Internet Não Disponível</string>
 </resources>
