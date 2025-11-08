@@ -1,5 +1,6 @@
 package com.br.eletriccarapp.presentation.ui
 
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
@@ -32,6 +33,15 @@ import android.os.Build
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
+import com.br.eletriccarapp.presentation.data.local.CarRepository
+import com.br.eletriccarapp.presentation.data.local.CarrosContract
+import com.br.eletriccarapp.presentation.data.local.CarrosContract.CarEntry.COLUMN_NAME_BATERIA
+import com.br.eletriccarapp.presentation.data.local.CarrosContract.CarEntry.COLUMN_NAME_POTENCIA
+import com.br.eletriccarapp.presentation.data.local.CarrosContract.CarEntry.COLUMN_NAME_PRECO
+import com.br.eletriccarapp.presentation.data.local.CarrosContract.CarEntry.COLUMN_NAME_RECARGA
+import com.br.eletriccarapp.presentation.data.local.CarrosContract.CarEntry.COLUMN_NAME_URL_PHOTO
+import com.br.eletriccarapp.presentation.data.local.CarrosContract.CarEntry.TABLE_NAME
+import com.br.eletriccarapp.presentation.data.local.CarsDbhelper
 
 class CarFragment: Fragment() {
     lateinit var fabCalcular : FloatingActionButton
@@ -94,7 +104,11 @@ class CarFragment: Fragment() {
         listaCarros.apply {
             isVisible = true
             adapter = carroAdapter
+        }
+        carroAdapter.carItemLister = { carro ->
+            //val bateria =  carro.bateria
 
+            val isSaved = CarRepository(requireContext()).saveIfNotExist(carro)
         }
     }
 
@@ -104,7 +118,7 @@ class CarFragment: Fragment() {
             //val textoDitado = preco.text.toString()
             //Log.d("Texto digitado", textoDitado)
             //calcular()
-            //startActivity(Intent(context, CalcularAutonomiaActivity::class.java))
+            startActivity(Intent(context, CalcularAutonomiaActivity::class.java))
 
         }
 
@@ -138,6 +152,8 @@ class CarFragment: Fragment() {
                     "Appication/json"
                 )
                 val responseCode = urlConnection.responseCode
+
+
 
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     response = urlConnection.inputStream.bufferedReader().use { it.readText() }
@@ -185,7 +201,9 @@ class CarFragment: Fragment() {
                         bateria = bateria,
                         potencia = potencia,
                         recarga = recarga,
-                        urlPhoto = urlPhoto
+                        urlPhoto = urlPhoto,
+                        isFavorite = false
+
                     )
                     carrosArray.add(model)
 
@@ -247,4 +265,7 @@ class CarFragment: Fragment() {
             return netWorkInfo.isConnected
         }
     }
+
+
+
 }

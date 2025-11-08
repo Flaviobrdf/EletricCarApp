@@ -1,5 +1,6 @@
 package com.br.eletriccarapp.presentation
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -23,8 +24,14 @@ class CalcularAutonomiaActivity : AppCompatActivity() {
         setContentView(R.layout.activity_calcular_autonomia)
         setupView()
         setupListeners()
-
+        setupCachedResult()
     }
+
+    private fun setupCachedResult() {
+        val valorCalculado = getSharedPref()
+        resultado.text = valorCalculado.toString()
+    }
+
     fun setupView(){
         preco = findViewById(R.id.et_preco_km)
         kmPercorrido = findViewById(R.id.et_km_percorrido)
@@ -53,6 +60,23 @@ class CalcularAutonomiaActivity : AppCompatActivity() {
 
         resultado.text = "R$: " + result.toString()
         Log.d("Resultado -> ", result.toString())
+
+        resultado.text = result.toString()
+        saveSharedPref(result)
+    }
+
+    //salva a preferencia
+    fun saveSharedPref(resultado: Float) {
+        val sharedPref = getPreferences(Context.MODE_PRIVATE) ?: return
+        with(sharedPref.edit()) {
+            putFloat(getString(R.string.saved_calc), resultado)
+            apply()
+        }
+    }
+
+    fun getSharedPref(): Float {
+        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+        return sharedPref.getFloat(getString(R.string.saved_calc), 0.0f)
     }
 
 }
